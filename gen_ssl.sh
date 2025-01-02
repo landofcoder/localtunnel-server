@@ -53,11 +53,11 @@ if [[ -n "${alias}" ]]; then
     alias_str="--challenge-alias ${alias}";
 fi
 
-$ACME --issue --force --dns $dns $alias_str \
+$ACME --register-account -m landofcoder@gmail.com --issue --force --dns $dns $alias_str \
 -d $domain \
 -d *.$domain
 
-$ACME --install-cert \
+$ACME --register-account -m landofcoder@gmail.com --install-cert \
 --key-file ./ssls/server.key \
 --fullchain-file ./ssls/server.crt \
 -d $domain \

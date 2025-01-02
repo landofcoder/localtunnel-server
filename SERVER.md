@@ -42,7 +42,6 @@ Enable HTTPS with Let's Encrypt:
 ```bash
 ./gen_ssl.sh -h
 ```
-
 ### License
 
 MIT
