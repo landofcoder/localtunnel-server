@@ -14,8 +14,7 @@ services:
     image: defunctzombie/localtunnel-server:latest
     restart: unless-stopped
     env_file: .env
-    #command: "--secure --port 3000 --domain ${DOMAIN} --landing ${LANDING}"
-    command: "--port 3000 --domain ${DOMAIN} --landing ${LANDING}"
+    command: "--secure --port 3000 --domain ${DOMAIN} --landing ${LANDING}"
     ports:
       - '3000'
     networks:
