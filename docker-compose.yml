@@ -1,0 +1,41 @@
+version: "3"
+
+services:
+  localtunnel:
+    container_name: localtunnel
+    image: defunctzombie/localtunnel-server:latest
+    restart: unless-stopped
+    #command: 'npm start'
+    env_file: .env
+    command: "--secure --port 3000 --domain ${DOMAIN} --landing ${LANDING}"
+    labels:
+      - "traefik.enable=true"
+      - "traefik.constraint-label=traefik-public"
+      - "traefik.http.routers.axxtunnel.entrypoints=web"
+      - "traefik.http.routers.axxtunnel.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.middlewares.axxtunnel-https-redirect.redirectscheme.scheme=https"
+      - "traefik.http.routers.axxtunnel.middlewares=axxtunnel-https-redirect"
+      - "traefik.http.routers.axxtunnel-secure.entrypoints=websecure"
+      - "traefik.http.routers.axxtunnel-secure.rule=Host(`${DOMAIN}`)"
+      - "traefik.http.routers.axxtunnel-secure.tls=true"
+      - "traefik.http.routers.axxtunnel-secure.tls.certresolver=le"
+      - "traefik.http.routers.axxtunnel-secure.service=axxtunnel-svc"
+      - "traefik.http.services.axxtunnel-svc.loadbalancer.server.port=3000"
+      - "traefik.docker.network=proxy"
+      # - "traefik.enable=true"
+      # - "traefik.http.routers.axxtunnel.rule=Host(`${DOMAIN}`)"
+      # - "traefik.http.routers.axxtunnel.entrypoints=web"
+      # - "traefik.http.services.axxtunnel.loadbalancer.server.port=3000"
+      # - "traefik.docker.network=proxy"
+    ports:
+      - '3000'
+    networks:
+      - proxy
+      - host
+
+networks:
+  proxy:
+    external:
+      name: proxy
+  host:
+    driver: bridge
